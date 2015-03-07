@@ -300,6 +300,11 @@ def parse_arguments():
                         dest='selected_paths', default=None,
                         help='Comma separated list of selected paths to write')
 
+    parser.add_argument('--write-only-drafts', action='store_true',
+                        dest='select_only_drafts', default=None,
+                        help='Filter selected paths to write to only articles '
+                        'marked as drafts.')
+
     return parser.parse_args()
 
 
@@ -321,6 +326,8 @@ def get_config(args):
         config['CACHE_PATH'] = args.cache_path
     if args.selected_paths:
         config['WRITE_SELECTED'] = args.selected_paths.split(',')
+    if args.select_only_drafts:
+        config['WRITE_ONLY_DRAFTS'] = True
     config['RELATIVE_URLS'] = args.relative_paths
     config['DEBUG'] = args.verbosity == logging.DEBUG
 

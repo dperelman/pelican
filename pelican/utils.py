@@ -750,13 +750,19 @@ class FileStampDataCacher(FileDataCacher):
         return data
 
 
-def is_selected_for_writing(settings, path):
+def is_selected_for_writing(settings, path, is_draft=False):
     '''Check whether path is selected for writing
-    according to the WRITE_SELECTED list
+    according to the WRITE_SELECTED list and
+    WRITE_ONLY_DRAFTS flag
 
     If WRITE_SELECTED is an empty list (default),
     any path is selected for writing.
+
+    If WRITE_ONLY_DRAFTS is enabled, then only select
+    for writing if is_draft is True.
     '''
+    if settings['WRITE_ONLY_DRAFTS'] and not is_draft:
+        return False
     if settings['WRITE_SELECTED']:
         return path in settings['WRITE_SELECTED']
     else:

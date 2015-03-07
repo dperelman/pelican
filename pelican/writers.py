@@ -91,7 +91,7 @@ class Writer(object):
         :param path: the path to output.
         :param feed_type: the feed type to use (atom or rss)
         """
-        if not is_selected_for_writing(self.settings, path):
+        if not is_selected_for_writing(self.settings, path, is_draft=False):
             return
 
         self.site_url = context.get(
@@ -140,9 +140,14 @@ class Writer(object):
         :param **kwargs: additional variables to pass to the templates
         """
 
+        is_draft = False
+        if 'article' in kwargs:
+            is_draft = kwargs['article'].status == 'draft'
+
         if name is False or name == "" or\
            not is_selected_for_writing(self.settings,\
-               os.path.join(self.output_path, name)):
+               os.path.join(self.output_path, name),\
+               is_draft=is_draft):
             return
         elif not name:
             # other stuff, just return for now
